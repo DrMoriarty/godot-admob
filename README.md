@@ -2,7 +2,8 @@ AdMob
 =====
 This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
 - Android only
-- Banner only (hasn't Interstitial)
+- Banner
+- Interstitial
  
 How to use
 ----------
