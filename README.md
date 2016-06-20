@@ -35,19 +35,23 @@ API Reference
 
 The following methods are available:
 
-	void init(boolean isReal, boolean isTop, String id)
+	void init(boolean isReal)
 		isReal: show real ad or test ad
-		isTop: banner is top of screen or buttom
+	
+	void showBanner(String id, boolean isTop)
 		id: banner unit id
+		isTop: banner is top of screen or buttom
 	
-	void showBanner(boolean isShow)
-		isShow: show or hide banner
-	
+	void showBanner()
+	void hideBanner()
+
+	void loadInterstitial(String id)
+		id: banner unit id
+
+	void showInterstitial()
+
 	int getAdWidth()
 	int getAdHeight()
-	
-	void resize(boolean isTop)
-		isTop: banner is top of screen or buttom
 
 License
 -------------
