@@ -31,6 +31,8 @@ To enable the module on Android, add the path to the module to the "modules" pro
 	[android]
 	modules="org/godotengine/godot/GodotAdMob"
 
+If you have more separete by comma.
+
 API Reference
 -------------
 
