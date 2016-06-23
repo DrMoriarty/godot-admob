@@ -12,6 +12,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.provider.Settings;
 import android.graphics.Color;
 import android.util.Log;
+import java.util.Locale;
 import android.view.Gravity;
 import android.view.View;
 
@@ -37,9 +38,9 @@ public class GodotAdMob extends Godot.SingletonBase
 	 * Initilization Singleton
 	 * @param Activity The main activity
 	 */
-	static public Godot.SingletonBase initialize(Activity p_activity)
+	static public Godot.SingletonBase initialize(Activity activity)
 	{
-		return new GodotAdMob(p_activity);
+		return new GodotAdMob(activity);
 	}
 
 	/**
@@ -257,7 +258,7 @@ public class GodotAdMob extends Godot.SingletonBase
 	private String getAdmobDeviceId()
 	{
 		String android_id = Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID);
-		String deviceId = md5(android_id).toUpperCase();
+		String deviceId = md5(android_id).toUpperCase(Locale.US);
 		return deviceId;
 	}
 
