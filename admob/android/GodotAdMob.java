@@ -1,10 +1,10 @@
-
 package org.godotengine.godot;
+
+import com.google.android.gms.ads.*;
+
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import com.google.android.gms.ads.*;
 
 import android.app.Activity;
 import android.widget.FrameLayout;
@@ -34,14 +34,14 @@ public class GodotAdMob extends Godot.SingletonBase
 	// Store if is real or not
 	private boolean isReal = false;
 
-	/**
-	 * Initilization Singleton
-	 * @param Activity The main activity
-	 */
-	static public Godot.SingletonBase initialize(Activity activity)
-	{
-		return new GodotAdMob(activity);
-	}
+	// Store the layout
+	private FrameLayout layout = null;
+
+	// Store the layout params
+	private FrameLayout.LayoutParams adParams = null;
+
+	/* Init
+	 * ********************************************************************** */
 
 	/**
 	 * Prepare for work with AdMob
@@ -63,6 +63,9 @@ public class GodotAdMob extends Godot.SingletonBase
 		Log.d("godot", "AdMob: init");
 	}
 
+	/* Banner
+	 * ********************************************************************** */
+
 	/**
 	 * Load a banner
 	 * @param String id AdMod Banner ID
@@ -74,8 +77,8 @@ public class GodotAdMob extends Godot.SingletonBase
 		{
 			@Override public void run()
 			{
-				FrameLayout	layout	= ((Godot) activity).layout;
-				FrameLayout.LayoutParams adParams = new FrameLayout.LayoutParams(
+				layout = ((Godot) activity).layout;
+				adParams = new FrameLayout.LayoutParams(
 					FrameLayout.LayoutParams.MATCH_PARENT,
 					FrameLayout.LayoutParams.WRAP_CONTENT
 				);
@@ -120,7 +123,6 @@ public class GodotAdMob extends Godot.SingletonBase
 					}
 				});
 				layout.addView(adView, adParams);
-
 				adView.loadAd(adRequest);
 			}
 		});
@@ -139,6 +141,46 @@ public class GodotAdMob extends Godot.SingletonBase
 				adView.setVisibility(View.VISIBLE);
 				adView.resume();
 				Log.d("godot", "AdMob: Show Banner");
+			}
+		});
+	}
+
+	/**
+	 * Resize the banner
+	 *
+	 */
+	public void resize()
+	{
+		activity.runOnUiThread(new Runnable()
+		{
+			@Override public void run()
+			{
+				layout.removeView(adView); // Remove the old view
+
+				// Extract params
+
+				int gravity = adParams.gravity;
+				FrameLayout	layout = ((Godot)activity).layout;
+				adParams = new FrameLayout.LayoutParams(
+					FrameLayout.LayoutParams.MATCH_PARENT,
+					FrameLayout.LayoutParams.WRAP_CONTENT
+				);
+				adParams.gravity = gravity;
+				AdListener adListener = adView.getAdListener();
+				String id = adView.getAdUnitId();
+
+				// Create new view & set old params
+				adView = new AdView(activity);
+				adView.setAdUnitId(id);
+				adView.setBackgroundColor(Color.TRANSPARENT);
+				adView.setAdSize(AdSize.SMART_BANNER);
+				adView.setAdListener(adListener);
+
+				// Add to layout and load ad
+				layout.addView(adView, adParams);
+				adView.loadAd(adRequest);
+
+				Log.d("godot", "AdMob: Banner Resized");
 			}
 		});
 	}
@@ -177,6 +219,9 @@ public class GodotAdMob extends Godot.SingletonBase
 	{
 		return AdSize.SMART_BANNER.getHeightInPixels(activity);
 	}
+
+	/* Interstitial
+	 * ********************************************************************** */
 
 	/**
 	 * Load a interstitial
@@ -224,6 +269,9 @@ public class GodotAdMob extends Godot.SingletonBase
 		});
 	}
 
+	/* Utils
+	 * ********************************************************************** */
+
 	/**
 	 * Generate MD5 for the deviceID
 	 * @param String s The string to generate de MD5
@@ -262,13 +310,27 @@ public class GodotAdMob extends Godot.SingletonBase
 		return deviceId;
 	}
 
+	/* Definitions
+	 * ********************************************************************** */
+
+	/**
+	 * Initilization Singleton
+	 * @param Activity The main activity
+	 */
+ 	static public Godot.SingletonBase initialize(Activity activity)
+ 	{
+ 		return new GodotAdMob(activity);
+ 	}
+
 	/**
 	 * Constructor
 	 * @param Activity Main activity
 	 */
 	public GodotAdMob(Activity p_activity) {
 		registerClass("AdMob", new String[] {
-			"init", "loadBanner", "showBanner", "hideBanner", "loadInterstitial", "showInterstitial", "getAdWidth", "getAdHeight"
+			"init",
+			"loadBanner", "showBanner", "hideBanner", "getAdWidth", "getAdHeight", "resize",
+			"loadInterstitial", "showInterstitial"
 		});
 		activity = p_activity;
 	}

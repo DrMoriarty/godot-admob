@@ -41,22 +41,33 @@ The following methods are available:
 	void init(boolean isReal)
 		isReal: show real ad or test ad
 	
+	// Banner
+
 	void showBanner(String id, boolean isTop)
 		id: banner unit id
 		isTop: banner is top of screen or buttom
 	
 	void showBanner()
 	void hideBanner()
+	void resize()
+
+	int getAdWidth()
+	int getAdHeight()
+
+	// Interstitial
 
 	void loadInterstitial(String id)
 		id: banner unit id
 
 	void showInterstitial()
 
-	int getAdWidth()
-	int getAdHeight()
+References
+-------------
+Based on the work of:
+* https://github.com/Mavhod/GodotAdmob
 
 License
 -------------
 MIT license
-	
+
+
