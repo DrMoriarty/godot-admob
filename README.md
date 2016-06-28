@@ -11,7 +11,7 @@ Drop the "admob" directory inside the "modules" directory on the Godot source.
 
 ~~Move file GodotAdMob.java from "admob/android/" to "platform/android/java/src/org/godotengine/godot/".~~
 
-Recompile.
+Recompile android export template (For documentation: http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates).
 
 
 In Example project goto Export > Target > Android:
