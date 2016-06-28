@@ -18,27 +18,16 @@ import android.view.View;
 
 public class GodotAdMob extends Godot.SingletonBase
 {
+	private Activity activity = null; // The main activity of the game
+	private int instance_id = 0;
 
-	// The main activity of the game
-	private Activity activity = null;
+	private InterstitialAd interstitialAd = null; // Interstitial object
+	private AdView adView = null; // Banner view
 
-	// Generic Ad request
-	private AdRequest adRequest = null;
+	private boolean isReal = false; // Store if is real or not
 
-	// Interstitial object
-	private InterstitialAd interstitialAd = null;
-
-	// Banner view
-	private AdView adView = null;
-
-	// Store if is real or not
-	private boolean isReal = false;
-
-	// Store the layout
-	private FrameLayout layout = null;
-
-	// Store the layout params
-	private FrameLayout.LayoutParams adParams = null;
+	private FrameLayout layout = null; // Store the layout
+	private FrameLayout.LayoutParams adParams = null; // Store the layout params
 
 	/* Init
 	 * ********************************************************************** */
@@ -47,19 +36,10 @@ public class GodotAdMob extends Godot.SingletonBase
 	 * Prepare for work with AdMob
 	 * @param boolean isReal Tell if the enviroment is for real or test
 	 */
-	public void init(boolean isReal)
+	public void init(boolean isReal, int instance_id)
 	{
 		this.isReal = isReal;
-
-		// Request
-		AdRequest.Builder adBuilder = new AdRequest.Builder();
-		adBuilder.tagForChildDirectedTreatment(true);
-		if (!isReal) {
-			adBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-			adBuilder.addTestDevice(getAdmobDeviceId());
-		}
-		adRequest = adBuilder.build();
-
+		this.instance_id = instance_id;
 		Log.d("godot", "AdMob: init");
 	}
 
@@ -96,6 +76,7 @@ public class GodotAdMob extends Godot.SingletonBase
 					@Override
 					public void onAdLoaded() {
 						Log.w("godot", "AdMob: onAdLoaded");
+						GodotLib.calldeferred(instance_id, "_on_admob_ad_loaded", new Object[]{ });
 					}
 
 					@Override
@@ -111,6 +92,7 @@ public class GodotAdMob extends Godot.SingletonBase
 								break;
 							case AdRequest.ERROR_CODE_NETWORK_ERROR:
 								str	= "ERROR_CODE_NETWORK_ERROR";
+								GodotLib.calldeferred(instance_id, "_on_admob_network_error", new Object[]{ });
 								break;
 							case AdRequest.ERROR_CODE_NO_FILL:
 								str	= "ERROR_CODE_NO_FILL";
@@ -123,7 +105,15 @@ public class GodotAdMob extends Godot.SingletonBase
 					}
 				});
 				layout.addView(adView, adParams);
-				adView.loadAd(adRequest);
+
+				// Request
+				AdRequest.Builder adBuilder = new AdRequest.Builder();
+				adBuilder.tagForChildDirectedTreatment(true);
+				if (!isReal) {
+					adBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+					adBuilder.addTestDevice(getAdmobDeviceId());
+				}
+				adView.loadAd(adBuilder.build());
 			}
 		});
 	}
@@ -178,7 +168,15 @@ public class GodotAdMob extends Godot.SingletonBase
 
 				// Add to layout and load ad
 				layout.addView(adView, adParams);
-				adView.loadAd(adRequest);
+
+				// Request
+				AdRequest.Builder adBuilder = new AdRequest.Builder();
+				adBuilder.tagForChildDirectedTreatment(true);
+				if (!isReal) {
+					adBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+					adBuilder.addTestDevice(getAdmobDeviceId());
+				}
+				adView.loadAd(adBuilder.build());
 
 				Log.d("godot", "AdMob: Banner Resized");
 			}
@@ -244,11 +242,28 @@ public class GodotAdMob extends Godot.SingletonBase
 
 					@Override
 					public void onAdClosed() {
+						GodotLib.calldeferred(instance_id, "_on_interstitial_close", new Object[] { });
+
+						AdRequest.Builder adBuilder = new AdRequest.Builder();
+						adBuilder.tagForChildDirectedTreatment(true);
+						if (!isReal) {
+							adBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+							adBuilder.addTestDevice(getAdmobDeviceId());
+						}
+						interstitialAd.loadAd(adBuilder.build());
+
 						Log.w("godot", "AdMob: onAdClosed");
-						interstitialAd.loadAd(adRequest);
 					}
 				});
-				interstitialAd.loadAd(adRequest);
+
+				AdRequest.Builder adBuilder = new AdRequest.Builder();
+				adBuilder.tagForChildDirectedTreatment(true);
+				if (!isReal) {
+					adBuilder.addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+					adBuilder.addTestDevice(getAdmobDeviceId());
+				}
+
+				interstitialAd.loadAd(adBuilder.build());
 			}
 		});
 	}
