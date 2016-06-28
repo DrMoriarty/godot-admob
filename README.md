@@ -14,7 +14,7 @@ Drop the "admob" directory inside the "modules" directory on the Godot source.
 Recompile.
 
 
-In Example project goto Export->Target->Android:
+In Example project goto Export > Target > Android:
 
 	Options:
 		Custom Package:
@@ -31,35 +31,36 @@ To enable the module on Android, add the path to the module to the "modules" pro
 	[android]
 	modules="org/godotengine/godot/GodotAdMob"
 
-If you have more separete by comma.
+If you have more separate by comma.
 
 API Reference
 -------------
 
 The following methods are available:
+```java
+void init(boolean isReal)
+	isReal: show real ad or test ad
 
-	void init(boolean isReal)
-		isReal: show real ad or test ad
+// Banner
+
+void showBanner(String id, boolean isTop)
+	id: banner unit id
+	isTop: banner is top of screen or buttom
 	
-	// Banner
+void showBanner()
+void hideBanner()
+void resize()
 
-	void showBanner(String id, boolean isTop)
-		id: banner unit id
-		isTop: banner is top of screen or buttom
-	
-	void showBanner()
-	void hideBanner()
-	void resize()
+int getAdWidth()
+int getAdHeight()
 
-	int getAdWidth()
-	int getAdHeight()
+// Interstitial
 
-	// Interstitial
+void loadInterstitial(String id)
+	id: banner unit id
 
-	void loadInterstitial(String id)
-		id: banner unit id
-
-	void showInterstitial()
+void showInterstitial()
+```
 
 References
 -------------
