@@ -37,29 +37,56 @@ API Reference
 -------------
 
 The following methods are available:
-```java
-void init(boolean isReal)
-	isReal: show real ad or test ad
+```python
 
-// Banner
+# Init AdMob
+# @param bool isReal Show real ad or test ad
+# @param int instance_id The instance id from Godot (get_instance_ID())
+init(isReal, instance_id)
 
-void showBanner(String id, boolean isTop)
-	id: banner unit id
-	isTop: banner is top of screen or buttom
-	
-void showBanner()
-void hideBanner()
-void resize()
+# Callback for Ad Loaded
+_on_admob_ad_loaded()
 
-int getAdWidth()
-int getAdHeight()
+# Callback for Network error
+_on_admob_network_error()
 
-// Interstitial
+# Banner Methods
+# --------------
 
-void loadInterstitial(String id)
-	id: banner unit id
+# Load Banner Ads (and show inmediatly)
+# @param String id The banner unit id
+# @param boolean isTop Show the banner on top or bottom
+loadBanner(id, isTop)
 
-void showInterstitial()
+# Show the banner
+showBanner()
+
+# Hide the banner
+hideBanner()
+
+# Resize the banner (when orientation change for example)
+resize()
+
+# Get the Banner width
+# @return int Banner width
+getAdWidth()
+
+# Get the Banner height
+# @return int Banner height
+getAdHeight()
+
+# Interstitial Methods
+# --------------------
+
+# Load Interstitial Ads
+# @param String id The interstitial unit id
+loadInterstitial(id)
+
+# Show the interstitial ad
+showInterstitial()
+
+# Callback for insterstitial ad close action
+_on_interstitial_close()
 ```
 
 References
