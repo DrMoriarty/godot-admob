@@ -279,6 +279,9 @@ public class GodotAdMob extends Godot.SingletonBase
 			{
 				if (interstitialAd.isLoaded()) {
 					interstitialAd.show();
+				} else {
+					Log.w("godot", "AdMob: _on_interstitial_not_loaded");
+					GodotLib.calldeferred(instance_id, "_on_interstitial_not_loaded", new Object[] { });
 				}
 			}
 		});
