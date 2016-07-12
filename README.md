@@ -85,6 +85,9 @@ loadInterstitial(id)
 # Show the interstitial ad
 showInterstitial()
 
+# Callback for interstitial ad fail on load
+_on_interstitial_not_loaded()
+
 # Callback for insterstitial ad close action
 _on_interstitial_close()
 ```
