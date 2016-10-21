@@ -347,7 +347,7 @@ public class GodotAdMob extends Godot.SingletonBase
 	public GodotAdMob(Activity p_activity) {
 		registerClass("AdMob", new String[] {
 			"init",
-			"loadBanner", "showBanner", "hideBanner", "getAdWidth", "getAdHeight", "resize",
+			"loadBanner", "showBanner", "hideBanner", "getBannerWidth", "getBannerHeight", "resize",
 			"loadInterstitial", "showInterstitial"
 		});
 		activity = p_activity;
