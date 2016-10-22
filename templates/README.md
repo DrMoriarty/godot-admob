@@ -1,4 +1,4 @@
-# Templates generated with 2.1 and Admob Module
+# Templates generated with Godot Engine 2.1 and Admob Module (Not Firebase)
 
 This templates are compiled using Godot 2.1 (Stable) and this module (Admob).
 
