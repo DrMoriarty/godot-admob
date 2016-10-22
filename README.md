@@ -69,11 +69,17 @@ resize()
 
 # Get the Banner width
 # @return int Banner width
-getAdWidth()
+getBannerWidth()
 
 # Get the Banner height
 # @return int Banner height
-getAdHeight()
+getBannerHeight()
+
+# Callback on ad loaded (Banner)
+_on_admob_ad_loaded
+
+# Callback on ad network error (Banner)
+_on_admob_network_error
 
 # Interstitial Methods
 # --------------------
@@ -87,6 +93,9 @@ showInterstitial()
 
 # Callback for interstitial ad fail on load
 _on_interstitial_not_loaded()
+
+# Callback for interstitial loaded
+_on_interstitial_loaded
 
 # Callback for insterstitial ad close action
 _on_interstitial_close()
