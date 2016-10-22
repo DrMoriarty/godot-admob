@@ -238,6 +238,7 @@ public class GodotAdMob extends Godot.SingletonBase
 					@Override
 					public void onAdLoaded() {
 						Log.w("godot", "AdMob: onAdLoaded");
+						GodotLib.calldeferred(instance_id, "_on_interstitial_loaded", new Object[] { });
 					}
 
 					@Override
