@@ -4,7 +4,7 @@ This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
 - Android only
 - Banner
 - Interstitial
- 
+
 How to use
 ----------
 Drop the "admob" directory inside the "modules" directory on the Godot source.
@@ -44,12 +44,6 @@ The following methods are available:
 # @param int instance_id The instance id from Godot (get_instance_ID())
 init(isReal, instance_id)
 
-# Callback for Ad Loaded
-_on_admob_ad_loaded()
-
-# Callback for Network error
-_on_admob_network_error()
-
 # Banner Methods
 # --------------
 
@@ -76,10 +70,10 @@ getBannerWidth()
 getBannerHeight()
 
 # Callback on ad loaded (Banner)
-_on_admob_ad_loaded
+_on_admob_ad_loaded()
 
 # Callback on ad network error (Banner)
-_on_admob_network_error
+_on_admob_network_error()
 
 # Interstitial Methods
 # --------------------
@@ -109,5 +103,3 @@ Based on the work of:
 License
 -------------
 MIT license
-
-
