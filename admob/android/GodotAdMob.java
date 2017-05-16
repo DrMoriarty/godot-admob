@@ -16,8 +16,15 @@ import java.util.Locale;
 import android.view.Gravity;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+
 public class GodotAdMob extends Godot.SingletonBase
 {
+
 	private Activity activity = null; // The main activity of the game
 	private int instance_id = 0;
 
@@ -28,6 +35,8 @@ public class GodotAdMob extends Godot.SingletonBase
 
 	private FrameLayout layout = null; // Store the layout
 	private FrameLayout.LayoutParams adParams = null; // Store the layout params
+
+	private RewardedVideoAd rewardedVideoAd = null; // Rewarded Video object
 
 	/* Init
 	 * ********************************************************************** */
@@ -42,6 +51,104 @@ public class GodotAdMob extends Godot.SingletonBase
 		this.instance_id = instance_id;
 		Log.d("godot", "AdMob: init");
 	}
+
+
+	/* Rewarded Video
+	 * ********************************************************************** */
+	private void initRewardedVideo()
+	{
+		activity.runOnUiThread(new Runnable()
+		{
+			@Override public void run()
+			{
+				MobileAds.initialize(activity);
+				rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity);
+				rewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener()
+				{
+					@Override
+					public void onRewardedVideoAdLeftApplication() {
+						Log.w("godot", "AdMob: onRewardedVideoAdLeftApplication");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_left_application", new Object[] { });
+					}
+
+					@Override
+					public void onRewardedVideoAdClosed() {
+						Log.w("godot", "AdMob: onRewardedVideoAdClosed");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_closed", new Object[] { });
+					}
+
+					@Override
+					public void onRewardedVideoAdFailedToLoad(int errorCode) {
+						Log.w("godot", "AdMob: onRewardedVideoAdFailedToLoad. errorCode: " + errorCode);
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_failed_to_load", new Object[] { errorCode });
+					}
+
+					@Override
+					public void onRewardedVideoAdLoaded() {
+						Log.w("godot", "AdMob: onRewardedVideoAdLoaded");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_loaded", new Object[] { });
+					}
+
+					@Override
+					public void onRewardedVideoAdOpened() {
+						Log.w("godot", "AdMob: onRewardedVideoAdOpened");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_ad_opened", new Object[] { });
+					}
+
+					@Override
+					public void onRewarded(RewardItem reward) {
+						Log.w("godot", "AdMob: " + String.format(" onRewarded! currency: %s amount: %d", reward.getType(),
+								reward.getAmount()));
+						GodotLib.calldeferred(instance_id, "_on_rewarded", new Object[] { reward.getType(), reward.getAmount() });
+					}
+
+					@Override
+					public void onRewardedVideoStarted() {
+						Log.w("godot", "AdMob: onRewardedVideoStarted");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_started", new Object[] { });
+					}
+				});
+
+			}
+		});
+
+	}
+
+	/**
+	 * Load a Rewarded Video
+	 * @param String id AdMod Rewarded video ID
+	 */
+	public void loadRewardedVideo(final String id) {
+		activity.runOnUiThread(new Runnable()
+		{
+			@Override public void run()
+			{
+				if (rewardedVideoAd == null) {
+					initRewardedVideo();
+				}
+
+				if (!rewardedVideoAd.isLoaded()) {
+					rewardedVideoAd.loadAd(id, new AdRequest.Builder().build());
+				}
+			}
+		});
+	}
+
+	/**
+	 * Show a Rewarded Video
+	 */
+	public void showRewardedVideo() {
+		activity.runOnUiThread(new Runnable()
+		{
+			@Override public void run()
+			{
+				if (rewardedVideoAd.isLoaded()) {
+					rewardedVideoAd.show();
+				}
+			}
+		});
+	}
+
 
 	/* Banner
 	 * ********************************************************************** */
@@ -349,7 +456,7 @@ public class GodotAdMob extends Godot.SingletonBase
 		registerClass("AdMob", new String[] {
 			"init",
 			"loadBanner", "showBanner", "hideBanner", "getBannerWidth", "getBannerHeight", "resize",
-			"loadInterstitial", "showInterstitial"
+			"loadInterstitial", "showInterstitial", "loadRewardedVideo", "showRewardedVideo"
 		});
 		activity = p_activity;
 	}

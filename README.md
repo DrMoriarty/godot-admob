@@ -93,6 +93,40 @@ _on_interstitial_loaded
 
 # Callback for insterstitial ad close action
 _on_interstitial_close()
+
+# Rewarded Videos Methods
+# -----------------------
+
+# Load rewarded videos ads
+# @param String id The rewarded video unit id
+loadRewardedVideo(id)
+
+# Show the rewarded video ad
+showRewardedVideo()
+
+# Callback for rewarded video ad left application
+_on_rewarded_video_ad_left_application()
+
+# Callback for rewarded video ad closed 
+_on_rewarded_video_ad_closed()
+
+# Callback for rewarded video ad failed to load
+# @param int errorCode the code of error
+_on_rewarded_video_ad_failed_to_load(errorCode)
+
+# Callback for rewarded video ad loaded
+_on_rewarded_video_ad_loaded()
+
+# Callback for rewarded video ad opened
+_on_rewarded_video_ad_opened()
+
+# Callback for rewarded video ad reward user
+# @param String currency The reward item description, ex: coin
+# @param int amount The reward item amount
+_on_rewarded(currency, amount)
+
+# Callback for rewarded video ad started do play
+_on_rewarded_video_started()
 ```
 
 References
