@@ -4,6 +4,7 @@ This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
 - Android only
 - Banner
 - Interstitial
+- Rewarded Video
 
 How to use
 ----------
