@@ -20,6 +20,9 @@ public:
     void loadBanner(const String &bannerId, bool isOnTop);
     void showBanner();
     void hideBanner();
+    void resize();
+    int getBannerWidth();
+    int getBannerHeight();
     void loadInterstitial(const String &interstitialId);
     void showInterstitial();
     void loadRewardedVideo(const String &rewardedId);

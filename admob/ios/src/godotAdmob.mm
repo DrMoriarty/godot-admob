@@ -114,15 +114,15 @@ void GodotAdmob::hideBanner() {
 }
 
 
-void resize() {
+void GodotAdmob::resize() {
     NSLog(@"Not implemented for iOS");
 }
 
-int getBannerWidth() {
+int GodotAdmob::getBannerWidth() {
     return bannerView.bounds.size.width;
 }
 
-int getBannerHeight() {
+int GodotAdmob::getBannerHeight() {
     return bannerView.bounds.size.height;
 }
 
@@ -202,7 +202,6 @@ void GodotAdmob::showRewardedVideo() {
     }
     
 }
-
 
 
 
@@ -342,7 +341,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(rewardMessage);
     
     Object *obj = ObjectDB::get_instance(self._instanceId);
-    obj->call_deferred("_on_rewarded", reward.type, reward.amount);
+    obj->call_deferred("_on_rewarded", [reward.type UTF8String], reward.amount.doubleValue);
     
 }
 
@@ -395,4 +394,7 @@ void GodotAdmob::_bind_methods() {
     ObjectTypeDB::bind_method("showInterstitial",&GodotAdmob::showInterstitial);
     ObjectTypeDB::bind_method("loadRewardedVideo",&GodotAdmob::loadRewardedVideo);
     ObjectTypeDB::bind_method("showRewardedVideo",&GodotAdmob::showRewardedVideo);
+    ObjectTypeDB::bind_method("resize",&GodotAdmob::resize);
+    ObjectTypeDB::bind_method("getBannerWidth",&GodotAdmob::getBannerWidth);
+    ObjectTypeDB::bind_method("getBannerHeight",&GodotAdmob::getBannerHeight);
 }
