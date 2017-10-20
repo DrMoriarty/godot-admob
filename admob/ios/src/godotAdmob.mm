@@ -1,14 +1,8 @@
 #include "godotAdmob.h"
-#include "core/globals.h"
-#include "core/variant.h"
-#include "core/message_queue.h"
-
-#import <GoogleMobileAds/GADRequest.h>
-#import <UIKit/UIKit.h>
 
 #import "app_delegate.h"
 
-
+#import <GoogleMobileAds/GADRequest.h>
 #import <GoogleMobileAds/GADBannerView.h>
 #import <GoogleMobileAds/GADInterstitial.h>
 #import <GoogleMobileAds/GADRewardBasedVideoAd.h>
