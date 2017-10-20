@@ -6,6 +6,7 @@
 class GodotAdmob : public Reference {
     OBJ_TYPE(GodotAdmob,Reference);
 
+    bool initialized;
     int instanceId;
     bool isReal;
     
@@ -21,6 +22,8 @@ public:
     void hideBanner();
     void loadInterstitial(const String &interstitialId);
     void showInterstitial();
+    void loadRewardedVideo(const String &rewardedId);
+    void showRewardedVideo();
 
     GodotAdmob();
     ~GodotAdmob();
