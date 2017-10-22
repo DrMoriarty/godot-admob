@@ -1,13 +1,15 @@
 AdMob
 =====
 This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
-- Android only
+- Android & iOS
 - Banner
 - Interstitial
 - Rewarded Video
 
 How to use
 ----------
+
+### Android
 Drop the "admob" directory inside the "modules" directory on the Godot source.
 
 ~~Move file GodotAdMob.java from "admob/android/" to "platform/android/java/src/org/godotengine/godot/".~~
@@ -23,10 +25,15 @@ In Example project goto Export > Target > Android:
 		Permissions on:
 			- Access Network State
 			- Internet
+### iOS
+- Drop the "admob" directory inside the "modules" directory on the Godot source;
+- Download and extract the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/download) inside the directory "admob/ios/lib";
+- Recompile the iOS export template (For documentation: http://docs.godotengine.org/en/stable/development/compiling/compiling_for_ios.html).
 
 Configuring your game
 ---------------------
 
+### Android
 To enable the module on Android, add the path to the module to the "modules" property on the [android] section of your engine.cfg file. It should look like this:
 
 	[android]
@@ -34,7 +41,10 @@ To enable the module on Android, add the path to the module to the "modules" pro
 
 If you have more separate by comma.
 
-API Reference
+### iOS
+Follow the [exporting to iOS official documentation](http://docs.godotengine.org/en/stable/learning/workflow/export/exporting_for_ios.html), just make sure you're using your custom template (compiled in the previous step) there.  
+
+API Reference (Android & iOS)
 -------------
 
 The following methods are available:
@@ -59,7 +69,7 @@ showBanner()
 # Hide the banner
 hideBanner()
 
-# Resize the banner (when orientation change for example)
+# Resize the banner (when orientation change for example) [#Android Only#]
 resize()
 
 # Get the Banner width
