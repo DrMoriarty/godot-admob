@@ -3,12 +3,31 @@
 
 #include "reference.h"
 
+
+#ifdef __OBJC__
+@class AdmobBanner;
+typedef AdmobBanner *bannerPtr;
+@class AdmobInterstitial;
+typedef AdmobInterstitial *interstitialPtr;
+@class AdmobRewarded;
+typedef AdmobRewarded *rewardedPtr;
+#else
+typedef void *bannerPtr;
+typedef void *interstitialPtr;
+typedef void *rewardedPtr;
+#endif
+
+
+
 class GodotAdmob : public Reference {
     OBJ_TYPE(GodotAdmob,Reference);
 
     bool initialized;
-    int instanceId;
-    bool isReal;
+    GodotAdmob *instance;
+    
+    bannerPtr banner;
+    interstitialPtr interstitial;
+    rewardedPtr rewarded;
     
 
 protected:
