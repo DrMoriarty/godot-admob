@@ -69,7 +69,7 @@ showBanner()
 # Hide the banner
 hideBanner()
 
-# Resize the banner (when orientation change for example) [#Android Only#]
+# Resize the banner (when orientation change for example)
 resize()
 
 # Get the Banner width
