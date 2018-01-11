@@ -4,8 +4,8 @@
 @implementation AdmobBanner
 
 - (void)dealloc {
-    bannerView_.delegate = nil;
-    [bannerView_ release];
+    bannerView.delegate = nil;
+    [bannerView release];
     [super dealloc];
 }
 
@@ -16,70 +16,95 @@
     rootController = (ViewController *)((AppDelegate *)[[UIApplication sharedApplication] delegate]).window.rootViewController;
 }
 
-- (void) loadBanner:(NSString*)bannerId: (BOOL)isOnTop {
+- (void) loadBanner:(NSString*)bannerId: (BOOL)is_on_top {
     NSLog(@"Calling loadBanner");
+    
+    isOnTop = is_on_top;
     
     if (!initialized) {
         return;
     }
     
-    if (bannerView_ == nil) {
-        bannerView_ = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
+
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    if (bannerView == nil) {
+        if (orientation == 0 || orientation == UIInterfaceOrientationPortrait) { //portrait
+            bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
+        }
+        else { //landscape
+            bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerLandscape];
+        }
         
         if(!isReal) {
-            bannerView_.adUnitID = @"ca-app-pub-3940256099942544/2934735716";
+            bannerView.adUnitID = @"ca-app-pub-3940256099942544/2934735716";
         }
         else {
-            bannerView_.adUnitID = bannerId;
+            bannerView.adUnitID = bannerId;
         }
 
-        bannerView_.delegate = self;
+        bannerView.delegate = self;
         
-        bannerView_.rootViewController = rootController;
-        [rootController.view addSubview:bannerView_];
+        bannerView.rootViewController = rootController;
+        [rootController.view addSubview:bannerView];
         
     }
     
     GADRequest *request = [GADRequest request];
-    [bannerView_ loadRequest:request];
+    [bannerView loadRequest:request];
     
-    if(!isOnTop) {
-        float height = rootController.view.frame.size.height;
-        float width = rootController.view.frame.size.width;
-        NSLog(@"height: %f, width: %f", height, width);
-        [bannerView_ setFrame:CGRectMake(0, height-bannerView_.bounds.size.height, bannerView_.bounds.size.width, bannerView_.bounds.size.height)];
+    
+    float height = rootController.view.frame.size.height;
+    float width = rootController.view.frame.size.width;
+    
+    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) { // landscape: swap width/height
+        float tmp = height;
+        height = width;
+        width = tmp;
     }
     
+    NSLog(@"height: %f, width: %f", height, width);
+
+    if(!isOnTop) {
+        [bannerView setFrame:CGRectMake(0, height-bannerView.bounds.size.height, bannerView.bounds.size.width, bannerView.bounds.size.height)];
+    }
 }
+
+
 
 - (void)showBanner {
     NSLog(@"Calling showBanner");
     
-    if (bannerView_ == nil || !initialized) {
+    if (bannerView == nil || !initialized) {
         return;
     }
     
-    [bannerView_ setHidden:NO];
+    [bannerView setHidden:NO];
 }
 
 - (void) hideBanner {
     NSLog(@"Calling hideBanner");
-    if (bannerView_ == nil || !initialized) {
+    if (bannerView == nil || !initialized) {
         return;
     }
-    [bannerView_ setHidden:YES];
+    [bannerView setHidden:YES];
 }
 
 - (void) resize {
-    NSLog(@"Not implemented for iOS");
+    NSLog(@"Calling resize");
+    NSString* currentAdUnitId = bannerView.adUnitID;
+    [self hideBanner];
+    [bannerView removeFromSuperview];
+    bannerView = nil;
+    [self loadBanner:currentAdUnitId:isOnTop];
 }
 
 - (int) getBannerWidth {
-    return bannerView_.bounds.size.width;
+    return bannerView.bounds.size.width;
 }
 
 - (int) getBannerHeight {
-    return bannerView_.bounds.size.height;
+    return bannerView.bounds.size.height;
 }
 
 

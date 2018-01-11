@@ -5,7 +5,6 @@
 GodotAdmob::GodotAdmob() {
     ERR_FAIL_COND(instance != NULL);
     instance = this;
-    isReal = false;
     initialized = false;
 }
 
@@ -15,7 +14,7 @@ GodotAdmob::~GodotAdmob() {
 
 void GodotAdmob::init(bool isReal, int instanceId) {
     if (initialized) {
-        NSLog(@"Module already initialized");
+        NSLog(@"GodotAdmob Module already initialized");
         return;
     }
     
@@ -34,6 +33,7 @@ void GodotAdmob::init(bool isReal, int instanceId) {
 
 void GodotAdmob::loadBanner(const String &bannerId, bool isOnTop) {
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     
@@ -44,6 +44,7 @@ void GodotAdmob::loadBanner(const String &bannerId, bool isOnTop) {
 
 void GodotAdmob::showBanner() {
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     
@@ -52,6 +53,7 @@ void GodotAdmob::showBanner() {
 
 void GodotAdmob::hideBanner() {
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     [banner hideBanner];
@@ -59,19 +61,32 @@ void GodotAdmob::hideBanner() {
 
 
 void GodotAdmob::resize() {
+    if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
+        return;
+    }
     [banner resize];
 }
 
 int GodotAdmob::getBannerWidth() {
-    return (int)[banner getBannerWidth];
+    if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
+        return 0;
+    }
+    return (uintptr_t)[banner getBannerWidth];
 }
 
 int GodotAdmob::getBannerHeight() {
-    return (int)[banner getBannerHeight];
+    if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
+        return 0;
+    }
+    return (uintptr_t)[banner getBannerHeight];
 }
 
 void GodotAdmob::loadInterstitial(const String &interstitialId) {
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     
@@ -82,6 +97,7 @@ void GodotAdmob::loadInterstitial(const String &interstitialId) {
 
 void GodotAdmob::showInterstitial() {
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     
@@ -92,6 +108,7 @@ void GodotAdmob::showInterstitial() {
 void GodotAdmob::loadRewardedVideo(const String &rewardedId) {
     //init
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     
@@ -101,8 +118,9 @@ void GodotAdmob::loadRewardedVideo(const String &rewardedId) {
 }
 
 void GodotAdmob::showRewardedVideo() {
-    //init
+    //show
     if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
         return;
     }
     

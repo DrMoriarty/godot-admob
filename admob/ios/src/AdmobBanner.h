@@ -2,15 +2,16 @@
 #import "app_delegate.h"
 
 @interface AdmobBanner: UIViewController <GADBannerViewDelegate> {
-    GADBannerView *bannerView_;
+    GADBannerView *bannerView;
     bool initialized;
     bool isReal;
+    bool isOnTop;
     int instanceId;
     ViewController *rootController;
 }
 
 - (void)initialize:(BOOL)is_real: (int)instance_id;
-- (void)loadBanner:(NSString*)bannerId :(BOOL)isOnTop;
+- (void)loadBanner:(NSString*)bannerId :(BOOL)is_on_top;
 - (void)showBanner;
 - (void)hideBanner;
 - (void)resize;
