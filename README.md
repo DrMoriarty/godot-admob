@@ -34,7 +34,7 @@ Configuring your game
 ---------------------
 
 ### Android
-To enable the module on Android, add the path to the module to the "modules" property on the [android] section of your engine.cfg file. It should look like this:
+To enable the module on Android, add the path to the module to the "modules" property on the [android] section of your  ```engine.cfg``` file (Godot 2) or ```project.godot``` (Godot 3). It should look like this:
 
 	[android]
 	modules="org/godotengine/godot/GodotAdMob"

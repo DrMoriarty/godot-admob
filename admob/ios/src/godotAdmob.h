@@ -1,6 +1,8 @@
 #ifndef GODOT_ADMOB_H
 #define GODOT_ADMOB_H
 
+#include <version_generated.gen.h>
+
 #include "reference.h"
 
 
@@ -20,7 +22,12 @@ typedef void *rewardedPtr;
 
 
 class GodotAdmob : public Reference {
-    OBJ_TYPE(GodotAdmob,Reference);
+    
+#if VERSION_MAJOR == 3
+    GDCLASS(GodotAdmob, Reference);
+#else
+    OBJ_TYPE(GodotAdmob, Reference);
+#endif
 
     bool initialized;
     GodotAdmob *instance;
