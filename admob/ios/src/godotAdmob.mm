@@ -1,6 +1,12 @@
 #include "godotAdmob.h"
 #import "app_delegate.h"
 
+#if VERSION_MAJOR == 3
+#define CLASS_DB ClassDB
+#else
+#define CLASS_DB ObjectTypeDB
+#endif
+
 
 GodotAdmob::GodotAdmob() {
     ERR_FAIL_COND(instance != NULL);
@@ -130,15 +136,15 @@ void GodotAdmob::showRewardedVideo() {
 
 
 void GodotAdmob::_bind_methods() {
-    ObjectTypeDB::bind_method("init",&GodotAdmob::init);
-    ObjectTypeDB::bind_method("loadBanner",&GodotAdmob::loadBanner);
-    ObjectTypeDB::bind_method("showBanner",&GodotAdmob::showBanner);
-    ObjectTypeDB::bind_method("hideBanner",&GodotAdmob::hideBanner);
-    ObjectTypeDB::bind_method("loadInterstitial",&GodotAdmob::loadInterstitial);
-    ObjectTypeDB::bind_method("showInterstitial",&GodotAdmob::showInterstitial);
-    ObjectTypeDB::bind_method("loadRewardedVideo",&GodotAdmob::loadRewardedVideo);
-    ObjectTypeDB::bind_method("showRewardedVideo",&GodotAdmob::showRewardedVideo);
-    ObjectTypeDB::bind_method("resize",&GodotAdmob::resize);
-    ObjectTypeDB::bind_method("getBannerWidth",&GodotAdmob::getBannerWidth);
-    ObjectTypeDB::bind_method("getBannerHeight",&GodotAdmob::getBannerHeight);
+    CLASS_DB::bind_method("init",&GodotAdmob::init);
+    CLASS_DB::bind_method("loadBanner",&GodotAdmob::loadBanner);
+    CLASS_DB::bind_method("showBanner",&GodotAdmob::showBanner);
+    CLASS_DB::bind_method("hideBanner",&GodotAdmob::hideBanner);
+    CLASS_DB::bind_method("loadInterstitial",&GodotAdmob::loadInterstitial);
+    CLASS_DB::bind_method("showInterstitial",&GodotAdmob::showInterstitial);
+    CLASS_DB::bind_method("loadRewardedVideo",&GodotAdmob::loadRewardedVideo);
+    CLASS_DB::bind_method("showRewardedVideo",&GodotAdmob::showRewardedVideo);
+    CLASS_DB::bind_method("resize",&GodotAdmob::resize);
+    CLASS_DB::bind_method("getBannerWidth",&GodotAdmob::getBannerWidth);
+    CLASS_DB::bind_method("getBannerHeight",&GodotAdmob::getBannerHeight);
 }

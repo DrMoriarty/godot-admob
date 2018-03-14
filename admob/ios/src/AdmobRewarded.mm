@@ -91,7 +91,7 @@
 - (void)rewardBasedVideoAd:(GADRewardBasedVideoAd *)rewardBasedVideoAd didFailToLoadWithError:(NSError *)error {
     NSLog(@"Reward based video ad failed to load: %@ ", error.localizedDescription);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_failed_to_load", error.code);
+    obj->call_deferred("_on_rewarded_video_ad_failed_to_load", (int)error.code);
 }
 
 @end
