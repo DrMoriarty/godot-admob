@@ -12,8 +12,6 @@ How to use
 ### Android
 Drop the "admob" directory inside the "modules" directory on the Godot source.
 
-~~Move file GodotAdMob.java from "admob/android/" to "platform/android/java/src/org/godotengine/godot/".~~
-
 Recompile android export template (For documentation: http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates).
 
 
@@ -42,7 +40,24 @@ To enable the module on Android, add the path to the module to the "modules" pro
 If you have more separate by comma.
 
 ### iOS
-Follow the [exporting to iOS official documentation](http://docs.godotengine.org/en/stable/learning/workflow/export/exporting_for_ios.html). Just make sure you're using your custom template (compiled in the previous step), for that  rename it to "godot_opt.iphone" and replace the file with same name inside the Xcode project.
+Follow the [exporting to iOS official documentation](http://docs.godotengine.org/en/stable/learning/workflow/export/exporting_for_ios.html).
+
+#### Godot 2
+Just make sure you're using your custom template (compiled in the previous step), for that  rename it to "godot_opt.iphone" and replace the file with same name inside the Xcode project.
+
+#### Godot 3
+- Export your project from Godot, it'll create an Xcode project;
+- Copy the library (.a) you have compiled following the official documentation inside the exported Xcode project. You must override the 'your_project_name.a' file with this file.
+- Copy the GoogleMobileAds.framwork inside the exported Xcode project folder and link it using the "Link Binary with Libraries" option;
+- Add the following frameworks to the project:
+	- StoreKit
+	- GameKit
+	- CoreVideo
+	- AdSupport
+	- MessageUI
+	- CoreTelephony
+	- CFNetwork
+	- MobileCoreServices
 
 API Reference (Android & iOS)
 -------------
