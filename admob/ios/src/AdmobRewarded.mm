@@ -94,4 +94,11 @@
     obj->call_deferred("_on_rewarded_video_ad_failed_to_load", (int)error.code);
 }
 
+- (void)rewardBasedVideoAdDidCompletePlaying:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
+    NSLog(@"Reward based video ad has completed.");
+    Object *obj = ObjectDB::get_instance(instanceId);
+    obj->call_deferred("_on_rewarded_video_completed");
+}
+
+
 @end
