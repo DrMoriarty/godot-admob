@@ -107,6 +107,12 @@ public class GodotAdMob extends Godot.SingletonBase
 						Log.w("godot", "AdMob: onRewardedVideoStarted");
 						GodotLib.calldeferred(instance_id, "_on_rewarded_video_started", new Object[] { });
 					}
+
+					@Override
+					public void onRewardedVideoCompleted() {
+						Log.w("godot", "AdMob: onRewardedVideoCompleted");
+						GodotLib.calldeferred(instance_id, "_on_rewarded_video_completed", new Object[] { });
+					}
 				});
 
 			}
