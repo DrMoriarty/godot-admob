@@ -155,6 +155,12 @@ _on_rewarded(currency, amount)
 _on_rewarded_video_started()
 ```
 
+Troubleshoot
+--------------
+Using the Xcode debug console for iOS and logcat for Android is the best way to troubleshoot most issues. You can filter Godot only messages with logcat using the command: ```adb logcat -s godot```
+
+_ERROR_CODE_NO_FILL_ is a common issue with Admob, but out of the scope to this module. Here's the description on the API page: [ERROR_CODE_NO_FILL: The ad request was successful, but no ad was returned due to lack of ad inventory.](https://developers.google.com/android/reference/com/google/android/gms/ads/AdRequest.html#ERROR_CODE_NO_FILL)
+
 References
 -------------
 Based on the work of:
