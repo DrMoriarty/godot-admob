@@ -44,33 +44,85 @@
         }
 
         bannerView.delegate = self;
-        
         bannerView.rootViewController = rootController;
-        [rootController.view addSubview:bannerView];
         
+
+        [self addBannerViewToView:bannerView:is_on_top];
     }
     
     GADRequest *request = [GADRequest request];
     [bannerView loadRequest:request];
     
-    
-    float height = rootController.view.frame.size.height;
-    float width = rootController.view.frame.size.width;
-    
-    if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) { // landscape: swap width/height
-        float tmp = height;
-        height = width;
-        width = tmp;
-    }
-    
-    NSLog(@"height: %f, width: %f", height, width);
+}
 
-    if(!isOnTop) {
-        [bannerView setFrame:CGRectMake(0, height-bannerView.bounds.size.height, bannerView.bounds.size.width, bannerView.bounds.size.height)];
+
+- (void)addBannerViewToView:(UIView *_Nonnull)bannerView: (BOOL)is_on_top{
+    bannerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [rootController.view addSubview:bannerView];
+    if (@available(ios 11.0, *)) {
+        [self positionBannerViewFullWidthAtSafeArea:bannerView:is_on_top];
+    } else {
+        [self positionBannerViewFullWidthAtView:bannerView:is_on_top];
     }
 }
 
 
+
+- (void)positionBannerViewFullWidthAtSafeArea:(UIView *_Nonnull)bannerView: (BOOL)is_on_top  NS_AVAILABLE_IOS(11.0) {
+    UILayoutGuide *guide = rootController.view.safeAreaLayoutGuide;
+    
+    if (is_on_top) {
+        [NSLayoutConstraint activateConstraints:@[
+            [guide.leftAnchor constraintEqualToAnchor:bannerView.leftAnchor],
+            [guide.rightAnchor constraintEqualToAnchor:bannerView.rightAnchor],
+            [guide.topAnchor constraintEqualToAnchor:bannerView.topAnchor]
+        ]];
+    } else {
+        [NSLayoutConstraint activateConstraints:@[
+            [guide.leftAnchor constraintEqualToAnchor:bannerView.leftAnchor],
+            [guide.rightAnchor constraintEqualToAnchor:bannerView.rightAnchor],
+            [guide.bottomAnchor constraintEqualToAnchor:bannerView.bottomAnchor]
+        ]];
+    }
+}
+
+
+- (void)positionBannerViewFullWidthAtView:(UIView *_Nonnull)bannerView: (BOOL)is_on_top {
+    
+    [rootController.view addConstraint:[NSLayoutConstraint constraintWithItem:bannerView
+                                                                    attribute:NSLayoutAttributeLeading
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:rootController.view
+                                                                    attribute:NSLayoutAttributeLeading
+                                                                   multiplier:1
+                                                                     constant:0]];
+    [rootController.view addConstraint:[NSLayoutConstraint constraintWithItem:bannerView
+                                                                    attribute:NSLayoutAttributeTrailing
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:rootController.view
+                                                                    attribute:NSLayoutAttributeTrailing
+                                                                   multiplier:1
+                                                                     constant:0]];
+    
+    if (is_on_top) {
+        [rootController.view addConstraint:[NSLayoutConstraint constraintWithItem:bannerView
+                                                                        attribute:NSLayoutAttributeTop
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:rootController.topLayoutGuide
+                                                                        attribute:NSLayoutAttributeTop
+                                                                       multiplier:1
+                                                                         constant:0]];
+        
+    } else {
+        [rootController.view addConstraint:[NSLayoutConstraint constraintWithItem:bannerView
+                                                              attribute:NSLayoutAttributeBottom
+                                                              relatedBy:NSLayoutRelationEqual
+                                                                 toItem:rootController.bottomLayoutGuide
+                                                              attribute:NSLayoutAttributeTop
+                                                             multiplier:1
+                                                               constant:0]];
+    }
+}
 
 - (void)showBanner {
     NSLog(@"Calling showBanner");
