@@ -360,6 +360,23 @@ public class GodotAdMob extends Godot.SingletonBase
 					}
 
 					@Override
+					public void onAdFailedToLoad(int errorCode) {
+						Log.w("godot", "AdMob: onAdFailedToLoad(int errorCode) - error code: " + Integer.toString(errorCode));
+						Log.w("godot", "AdMob: _on_interstitial_not_loaded");
+						GodotLib.calldeferred(instance_id, "_on_interstitial_not_loaded", new Object[] { });
+					}
+				
+					@Override
+					public void onAdOpened() {
+						Log.w("godot", "AdMob: onAdOpened()");
+					}
+				
+					@Override
+					public void onAdLeftApplication() {
+						Log.w("godot", "AdMob: onAdLeftApplication()");
+					}
+
+					@Override
 					public void onAdClosed() {
 						GodotLib.calldeferred(instance_id, "_on_interstitial_close", new Object[] { });
 
@@ -399,8 +416,7 @@ public class GodotAdMob extends Godot.SingletonBase
 				if (interstitialAd.isLoaded()) {
 					interstitialAd.show();
 				} else {
-					Log.w("godot", "AdMob: _on_interstitial_not_loaded");
-					GodotLib.calldeferred(instance_id, "_on_interstitial_not_loaded", new Object[] { });
+					Log.w("w", "AdMob: showInterstitial - interstitial not loaded");
 				}
 			}
 		});
@@ -466,8 +482,12 @@ public class GodotAdMob extends Godot.SingletonBase
 	public GodotAdMob(Activity p_activity) {
 		registerClass("AdMob", new String[] {
 			"init",
+			// banner
 			"loadBanner", "showBanner", "hideBanner", "getBannerWidth", "getBannerHeight", "resize",
-			"loadInterstitial", "showInterstitial", "loadRewardedVideo", "showRewardedVideo"
+			// Interstitial
+			"loadInterstitial", "showInterstitial", 
+			// Rewarded video
+			"loadRewardedVideo", "showRewardedVideo"
 		});
 		activity = p_activity;
 	}
