@@ -50,8 +50,20 @@ public class GodotAdMob extends Godot.SingletonBase
 	/**
 	 * Prepare for work with AdMob
 	 * @param boolean isReal Tell if the enviroment is for real or test
+	 * @param int gdscript instance id
 	 */
-	public void init(boolean isReal, int instance_id, boolean isForChildDirectedTreatment, String maxAdContentRating)
+	public void init(boolean isReal, int instance_id) {
+		this.initWithContentRating(isReal, instance_id, false, "");
+	}
+
+	/**
+	 * Init with content rating additional options 
+	 * @param boolean isReal Tell if the enviroment is for real or test
+	 * @param int gdscript instance id
+	 * @param boolean isForChildDirectedTreatment
+	 * @param String maxAdContentRating must be "G", "PG", "T" or "MA"
+	 */
+	public void initWithContentRating(boolean isReal, int instance_id, boolean isForChildDirectedTreatment, String maxAdContentRating)
 	{
 		this.isReal = isReal;
 		this.instance_id = instance_id;
@@ -62,7 +74,7 @@ public class GodotAdMob extends Godot.SingletonBase
 			extras = new Bundle();
 			extras.putString("max_ad_content_rating", maxAdContentRating);
 		}
-		Log.d("godot", "AdMob: init");
+		Log.d("godot", "AdMob: init with content rating options");
 	}
 
 
@@ -499,6 +511,7 @@ public class GodotAdMob extends Godot.SingletonBase
 	public GodotAdMob(Activity p_activity) {
 		registerClass("AdMob", new String[] {
 			"init",
+			"initWithContentRating",
 			// banner
 			"loadBanner", "showBanner", "hideBanner", "getBannerWidth", "getBannerHeight", "resize",
 			// Interstitial
