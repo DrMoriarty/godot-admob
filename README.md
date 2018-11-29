@@ -164,6 +164,11 @@ _on_rewarded(currency, amount)
 _on_rewarded_video_started()
 ```
 
+Known Issues
+--------------
+* You can't use Rewarded Video and any other ad type (Banner and/or Interstitial) at same time on iOS or your app will crash with the error ```Multiple locks on web thread not allowed``` when the Reward is closed. To fix this, we need help from an iOS developer as I don't have any Apple hardware to do it by myself. You can see more details about this issue [here](https://github.com/kloder-games/godot-admob/issues/53).
+
+
 Troubleshooting
 --------------
 
