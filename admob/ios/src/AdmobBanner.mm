@@ -13,7 +13,7 @@
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
-    rootController = (ViewController *)((AppDelegate *)[[UIApplication sharedApplication] delegate]).window.rootViewController;
+    rootController = [AppDelegate getViewController];
 }
 
 - (void) loadBanner:(NSString*)bannerId: (BOOL)is_on_top {

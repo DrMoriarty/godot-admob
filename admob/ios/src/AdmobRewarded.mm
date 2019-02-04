@@ -11,7 +11,7 @@
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
-    rootController = (ViewController *)((AppDelegate *)[[UIApplication sharedApplication] delegate]).window.rootViewController;
+    rootController = [AppDelegate getViewController];
 }
 
 - (void) loadRewardedVideo:(NSString*) rewardedId {
