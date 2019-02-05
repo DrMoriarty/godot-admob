@@ -1,7 +1,7 @@
 #import <GoogleMobileAds/GADBannerView.h>
 #import "app_delegate.h"
 
-@interface AdmobBanner: UIViewController <GADBannerViewDelegate> {
+@interface AdmobBanner: NSObject <GADBannerViewDelegate> {
     GADBannerView *bannerView;
     bool initialized;
     bool isReal;

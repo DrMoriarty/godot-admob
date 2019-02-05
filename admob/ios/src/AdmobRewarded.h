@@ -2,7 +2,7 @@
 #import <GoogleMobileAds/GADRewardBasedVideoAdDelegate.h>
 
 
-@interface AdmobRewarded: UIViewController <GADRewardBasedVideoAdDelegate> {
+@interface AdmobRewarded: NSObject <GADRewardBasedVideoAdDelegate> {
     bool initialized;
     bool isReal;
     int instanceId;
