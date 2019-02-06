@@ -1,7 +1,7 @@
 #import <GoogleMobileAds/GADInterstitial.h>
 #import "app_delegate.h"
 
-@interface AdmobInterstitial: UIViewController <GADInterstitialDelegate> {
+@interface AdmobInterstitial: NSObject <GADInterstitialDelegate> {
     GADInterstitial *interstitial;
     bool initialized;
     bool isReal;
