@@ -12,8 +12,7 @@ How to use
 ### Android
 Drop the "admob" directory inside the "modules" directory on the Godot source.
 
-[Recompile the android export template](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates).
-
+[Recompile the android export template](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates). _* If you don't want or can't build the template by yourself, you can find a precompiled template with this module [here](https://github.com/Shin-NiL/godot-custom-mobile-template)_.
 
 In Example project goto Export > Target > Android:
 
