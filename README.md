@@ -12,7 +12,7 @@ How to use
 ### Android
 Drop the "admob" directory inside the "modules" directory on the Godot source.
 
-Recompile android export template (For documentation: http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates).
+[Recompile the android export template](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates).
 
 
 In Example project goto Export > Target > Android:
@@ -25,8 +25,8 @@ In Example project goto Export > Target > Android:
 			- Internet
 ### iOS
 - Drop the "admob" directory inside the "modules" directory on the Godot source;
-- Download and extract the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/download) inside the directory "admob/ios/lib";
-- Recompile the iOS export template (For documentation: http://docs.godotengine.org/en/stable/development/compiling/compiling_for_ios.html).
+- Download and extract the [Google Mobile Ads SDK](https://developers.google.com/admob/ios/download) **(<= 7.41.0)** inside the directory "admob/ios/lib";
+- [Recompile the iOS export template](http://docs.godotengine.org/en/stable/development/compiling/compiling_for_ios.html).
 
 Configuring your game
 ---------------------
@@ -48,7 +48,7 @@ Just make sure you're using your custom template (compiled in the previous step)
 #### Godot 3
 - Export your project from Godot, it'll create an Xcode project;
 - Copy the library (.a) you have compiled following the official documentation inside the exported Xcode project. You must override the 'your_project_name.a' file with this file.
-- Copy the GoogleMobileAds.framwork inside the exported Xcode project folder and link it using the "Link Binary with Libraries" option;
+- Copy the GoogleMobileAds.framework inside the exported Xcode project folder and link it using the "Link Binary with Libraries" option;
 - Add the following frameworks to the project:
 	- StoreKit
 	- GameKit
