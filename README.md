@@ -165,7 +165,7 @@ _on_rewarded_video_started()
 
 Known Issues
 --------------
-* You can't use Rewarded Video and any other ad type (Banner and/or Interstitial) at same time on iOS or your app will crash with the error ```Multiple locks on web thread not allowed``` when the Reward is closed. To fix this, we need help from an iOS developer as I don't have any Apple hardware to do it by myself. You can see more details about this issue [here](https://github.com/kloder-games/godot-admob/issues/53).
+* You can't use Rewarded Video and any other ad type (Banner and/or Interstitial) at same time on iOS or your app will crash with the error ```Multiple locks on web thread not allowed``` when the Reward is closed. To fix this, we need help from an iOS developer as I don't have any Apple hardware to do it by myself. You can see more details about this issue [here](https://github.com/kloder-games/godot-admob/issues/53). You can find a workaround for this issue [here](https://github.com/kloder-games/godot-admob/issues/53#issuecomment-501540139).
 
 
 Troubleshooting
@@ -176,6 +176,8 @@ Troubleshooting
 * Using the Xcode debug console for iOS and logcat for Android is the best way to troubleshoot most issues. You can filter Godot only messages with logcat using the command: ```adb logcat -s godot```
 
 * _ERROR_CODE_NO_FILL_ is a common issue with Admob, but out of the scope to this module. Here's the description on the API page: [ERROR_CODE_NO_FILL: The ad request was successful, but no ad was returned due to lack of ad inventory.](https://developers.google.com/android/reference/com/google/android/gms/ads/AdRequest.html#ERROR_CODE_NO_FILL)
+
+* If you're getting the error ```Undefined symbols for architecture armv7``` compiling for iOS, you should try open up the project in xcode, go to "General" tab, remove "GoogleMobileAds.framework" from frameworks, then re-add it. Should build then. Also, make sure you have directory godot/modules/admob/ios/lib added to framework search path (“Build Settings”). More info [here](https://github.com/kloder-games/godot-admob/issues/90#issuecomment-501608259).
 
 References
 -------------
