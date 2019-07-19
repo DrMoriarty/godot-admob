@@ -10,16 +10,25 @@ How to use
 ----------
 
 ### Android
-Drop the "admob" directory inside the "modules" directory on the Godot source.
+To use this module you'll need a custom template for Android. You can build it by yourself or download a precompiled one. 
 
-[Recompile the android export template](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates). _* If you don't want or can't build the template by yourself, you can find a precompiled template with this module [here](https://github.com/Shin-NiL/godot-custom-mobile-template)_.
+#### Compiling the template (First Option)
+This is harder, but you'll have more control over the building process. You can, for example, include any other module you want.
+For that, do the following steps:
+- Clone or download this repository.
+- Clone or download the [Godot Engine repository](https://github.com/godotengine/godot/). One important note here is that this must match the same version of the Godot editor you're using to develop your game.
+- Drop the "admob" directory inside the "modules" directory on the Godot source.
+- Recompile the android export template following the [official instructions](http://docs.godotengine.org/en/latest/reference/compiling_for_android.html#compiling-export-templates).
 
-In Example project goto Export > Target > Android:
+#### Using precompiled templates (Second Option)
+If you don't want or can't build the template by yourself, you can find a precompiled template with this module [here](https://github.com/Shin-NiL/godot-custom-mobile-template). Go to the release tab and download the zip file.
 
-	Options:
-		Custom Package:
-			- place your apk from build
-		Permissions on:
+#### Export configuration
+- In your project goto Export > Target > Android:
+	- Options:
+		- Custom Package:
+			- place the template apk you had compiled (or downloaded)
+		- Permissions on:
 			- Access Network State
 			- Internet
 ### iOS
