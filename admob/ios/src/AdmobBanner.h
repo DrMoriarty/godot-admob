@@ -7,6 +7,7 @@
     bool isReal;
     bool isOnTop;
     int instanceId;
+    NSString *adUnitId;
     ViewController *rootController;
 }
 
@@ -14,6 +15,8 @@
 - (void)loadBanner:(NSString*)bannerId :(BOOL)is_on_top;
 - (void)showBanner;
 - (void)hideBanner;
+- (void)disableBanner;
+- (void)enableBanner;
 - (void)resize;
 - (int)getBannerWidth;
 - (int)getBannerHeight;
