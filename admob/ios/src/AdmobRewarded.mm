@@ -7,10 +7,11 @@
 @implementation AdmobRewarded
 
 
-- (void)initialize:(BOOL)is_real: (int)instance_id {
+- (void)initialize:(BOOL)is_real: (int)instance_id: (AdmobBanner *)admob_banner {
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
+    admobBanner = admob_banner;
     rootController = [AppDelegate getViewController];
 }
 
@@ -42,6 +43,7 @@
     }
     
     if ([[GADRewardBasedVideoAd sharedInstance] isReady]) {
+        [admobBanner disableBanner];
         [[GADRewardBasedVideoAd sharedInstance] presentFromRootViewController:rootController];
     }
     
@@ -78,8 +80,13 @@
          
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad is closed.");
+    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:0];
     Object *obj = ObjectDB::get_instance(instanceId);
     obj->call_deferred("_on_rewarded_video_ad_closed");
+}
+- (void)bannerEnable{
+    NSLog(@"banner enable call");
+    [admobBanner enableBanner];
 }
          
 - (void)rewardBasedVideoAdWillLeaveApplication:(GADRewardBasedVideoAd *)rewardBasedVideoAd {

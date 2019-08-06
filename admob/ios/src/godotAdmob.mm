@@ -33,7 +33,7 @@ void GodotAdmob::init(bool isReal, int instanceId) {
     [interstitial initialize:isReal :instanceId :banner];
     
     rewarded = [AdmobRewarded alloc];
-    [rewarded initialize:isReal :instanceId];
+    [rewarded initialize:isReal :instanceId :banner];
 }
 
 
