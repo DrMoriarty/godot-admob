@@ -10,10 +10,11 @@
     [super dealloc];
 }
 
-- (void)initialize:(BOOL)is_real: (int)instance_id {
+- (void)initialize:(BOOL)is_real: (int)instance_id: (AdmobBanner *)admob_banner {
     isReal = is_real;
     initialized = true;
     instanceId = instance_id;
+    admobBanner = admob_banner;
     rootController = [AppDelegate getViewController];
 }
 
@@ -51,6 +52,7 @@
     }
     
     if (interstitial.isReady) {
+        [admobBanner disableBanner];
         [interstitial presentFromRootViewController:rootController];
     } else {
         NSLog(@"Interstitial Ad wasn't ready");
@@ -84,6 +86,11 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 /// Tells the delegate the interstitial is to be animated off the screen.
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialWillDismissScreen");
+    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:0];
+}
+- (void)bannerEnable{
+    NSLog(@"banner enable call");
+    [admobBanner enableBanner];
 }
 
 /// Tells the delegate the interstitial had been animated off the screen.
@@ -91,6 +98,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"interstitialDidDismissScreen");
     Object *obj = ObjectDB::get_instance(instanceId);
     obj->call_deferred("_on_interstitial_close");
+ 
 }
 
 /// Tells the delegate that a user click will open another app

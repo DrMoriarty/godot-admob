@@ -16,6 +16,7 @@
     rootController = [AppDelegate getViewController];
 }
 
+
 - (void) loadBanner:(NSString*)bannerId: (BOOL)is_on_top {
     NSLog(@"Calling loadBanner");
     
@@ -140,6 +141,29 @@
         return;
     }
     [bannerView setHidden:YES];
+}
+- (void) disableBanner {
+    NSLog(@"Calling disableBanner");
+    if (bannerView == nil || !initialized) {
+        return;
+    }
+ 
+    [bannerView setHidden:YES];
+    [bannerView removeFromSuperview];
+    adUnitId = bannerView.adUnitID;
+    bannerView = nil;
+}
+ 
+- (void) enableBanner {
+    NSLog(@"Calling enableBanner");
+    if (!initialized) {
+        return;
+    }
+ 
+    if (bannerView == nil) {
+        [self loadBanner:adUnitId:isOnTop];
+    }
+    [bannerView setHidden:NO];
 }
 
 - (void) resize {
