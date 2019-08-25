@@ -1,6 +1,8 @@
 #import <GoogleMobileAds/GADBannerView.h>
 #import "app_delegate.h"
 
+#define BANNER_ENABLE_DELAY 5
+ 
 @interface AdmobBanner: NSObject <GADBannerViewDelegate> {
     GADBannerView *bannerView;
     bool initialized;

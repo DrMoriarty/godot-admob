@@ -86,7 +86,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 /// Tells the delegate the interstitial is to be animated off the screen.
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialWillDismissScreen");
-    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:0];
+    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:BANNER_ENABLE_DELAY];
 }
 - (void)bannerEnable{
     NSLog(@"banner enable call");

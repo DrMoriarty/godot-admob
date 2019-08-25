@@ -80,7 +80,8 @@
          
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
     NSLog(@"Reward based video ad is closed.");
-    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:0];
+    NSLog(@"Enable Banner with delay:%d",BANNER_ENABLE_DELAY);
+    [self performSelector:@selector(bannerEnable) withObject:nil afterDelay:BANNER_ENABLE_DELAY];
     Object *obj = ObjectDB::get_instance(instanceId);
     obj->call_deferred("_on_rewarded_video_ad_closed");
 }
