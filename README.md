@@ -6,6 +6,8 @@ This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
 - Interstitial
 - Rewarded Video
 
+[Here](https://github.com/Shin-NiL/Godot-Android-Admob-Plugin) you can find a port of this project for the [Godot's new Android plugin system](https://godotengine.org/article/godot-3-2-will-get-new-android-plugin-system) (no recompile needed).
+
 How to use
 ----------
 
