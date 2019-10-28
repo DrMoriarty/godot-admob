@@ -6,13 +6,12 @@ This is the AdMob module for Godot Engine (https://github.com/okamstudio/godot)
 - Interstitial
 - Rewarded Video
 
-[Here](https://github.com/Shin-NiL/Godot-Android-Admob-Plugin) you can find a port of this project for the [Godot's new Android plugin system](https://godotengine.org/article/godot-3-2-will-get-new-android-plugin-system) (no recompile needed).
-
 How to use
 ----------
 
 ### Android
-To use this module you'll need a custom template for Android. You can build it by yourself or download a precompiled one. 
+To use this module you'll need a custom template for Android. You can build it by yourself or download a precompiled one.
+Another option available for Godot 3.2+ is the [new Android plugin system](https://godotengine.org/article/godot-3-2-will-get-new-android-plugin-system), much easier to use (no recompilation needed). You can find a port of this module using this system [here](https://github.com/Shin-NiL/Godot-Android-Admob-Plugin).
 
 #### Compiling the template (First Option)
 This is harder, but you'll have more control over the building process. You can, for example, include any other module you want.
