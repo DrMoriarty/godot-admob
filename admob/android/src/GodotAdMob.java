@@ -18,11 +18,12 @@ import android.view.View;
 import android.os.Bundle;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.MobileAds;
 import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
 
 public class GodotAdMob extends Godot.SingletonBase
 {
@@ -32,7 +33,8 @@ public class GodotAdMob extends Godot.SingletonBase
 
     private HashMap<String, InterstitialAd> interstitials = new HashMap<>();
     private HashMap<String, AdView> banners = new HashMap<>();
-    private HashMap<String, RewardedVideoAd> rewardeds = new HashMap<>();
+    private HashMap<String, RewardedAd> rewardeds = new HashMap<>();
+    private HashMap<String, RewardedAdCallback> rewardedCallbacks = new HashMap<>();
 
 	private boolean isReal = false; // Store if is real or not
 	private boolean isForChildDirectedTreatment = false; // Store if is children directed treatment desired
@@ -103,11 +105,57 @@ public class GodotAdMob extends Godot.SingletonBase
 
 	/* Rewarded Video
 	 * ********************************************************************** */
-	private RewardedVideoAd initRewardedVideo(final String id, final int callback_id)
+	private RewardedAd initRewardedVideo(final String id, final int callback_id)
 	{
-        MobileAds.initialize(activity);
-        RewardedVideoAd rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity);
-        rewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener()
+        RewardedAd rewardedAd = new RewardedAd(activity, id);
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+                Log.w("godot", "AdMob: onRewardedVideoAdLoaded");
+                GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_loaded", new Object[] { id });
+            }
+
+           @Override
+            public void onRewardedAdFailedToLoad(int errorCode) {
+                // Ad failed to load.
+               Log.w("godot", "AdMob: onRewardedVideoAdFailedToLoad. errorCode: " + errorCode);
+               GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_failed_to_load", new Object[] { id, ""+errorCode });
+            }
+        };
+        RewardedAdCallback adCallback = new RewardedAdCallback() {
+                @Override
+                public void onRewardedAdOpened() {
+                    // Ad opened.
+                    Log.w("godot", "AdMob: onRewardedVideoAdOpened");
+                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_opened", new Object[] { id });
+                }
+
+                @Override
+                public void onRewardedAdClosed() {
+                    // Ad closed.
+                    Log.w("godot", "AdMob: onRewardedVideoAdClosed");
+                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_closed", new Object[] { id });
+                }
+
+                @Override
+                public void onUserEarnedReward(RewardItem reward) {
+                    // User earned reward.
+                    Log.w("godot", "AdMob: " + String.format(" onRewarded! currency: %s amount: %d", reward.getType(), reward.getAmount()));
+                    GodotLib.calldeferred(callback_id, "_on_rewarded", new Object[] { id, reward.getType(), reward.getAmount() });
+                }
+
+                @Override
+                public void onRewardedAdFailedToShow(int errorCode) {
+                    // Ad failed to display.
+                    Log.w("godot", "AdMob: onRewardedVideoAdFailedToShow. errorCode: " + errorCode);
+                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_failed_to_load", new Object[] { id, ""+errorCode });
+                }
+            };
+        rewardedCallbacks.put(id, adCallback);
+        rewardedAd.loadAd(getAdRequest(), adLoadCallback);
+        /*
+        rewardedAd.setRewardedVideoAdListener(new RewardedVideoAdListener()
             {
                 @Override
                 public void onRewardedVideoAdLeftApplication() {
@@ -158,7 +206,8 @@ public class GodotAdMob extends Godot.SingletonBase
                 }
             });
         rewardedVideoAd.loadAd(id, getAdRequest());
-        return rewardedVideoAd;
+        */
+        return rewardedAd;
 	}
 
 	/**
@@ -170,7 +219,7 @@ public class GodotAdMob extends Godot.SingletonBase
 		{
 			@Override public void run()
 			{
-                RewardedVideoAd rew = initRewardedVideo(id, callback_id);
+                RewardedAd rew = initRewardedVideo(id, callback_id);
                 rewardeds.put(id, rew);
 			}
 		});
@@ -185,9 +234,11 @@ public class GodotAdMob extends Godot.SingletonBase
 			@Override public void run()
 			{
                 if(rewardeds.containsKey(id)) {
-                    RewardedVideoAd r = rewardeds.get(id);
+                    RewardedAd r = rewardeds.get(id);
+                    RewardedAdCallback cb = rewardedCallbacks.get(id);
                     if (r.isLoaded()) {
-                        r.show();
+                        //r.show();
+                        r.show(activity, cb);
                     } else {
                         Log.w("godot", "AdMob: showRewardedVideo - rewarded not loaded");
                     }
@@ -576,5 +627,6 @@ public class GodotAdMob extends Godot.SingletonBase
 			"loadRewardedVideo", "showRewardedVideo"
 		});
 		activity = p_activity;
+        //MobileAds.initialize(activity);
 	}
 }
