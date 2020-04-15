@@ -16,6 +16,8 @@ import java.util.Locale;
 import android.view.Gravity;
 import android.view.View;
 import android.os.Bundle;
+import android.view.Display;
+import android.util.DisplayMetrics;
 
 import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.MobileAds;
@@ -154,59 +156,6 @@ public class GodotAdMob extends Godot.SingletonBase
             };
         rewardedCallbacks.put(id, adCallback);
         rewardedAd.loadAd(getAdRequest(), adLoadCallback);
-        /*
-        rewardedAd.setRewardedVideoAdListener(new RewardedVideoAdListener()
-            {
-                @Override
-                public void onRewardedVideoAdLeftApplication() {
-                    Log.w("godot", "AdMob: onRewardedVideoAdLeftApplication");
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_left_application", new Object[] { id });
-                }
-
-                @Override
-                public void onRewardedVideoAdClosed() {
-                    Log.w("godot", "AdMob: onRewardedVideoAdClosed");
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_closed", new Object[] { id });
-                }
-
-                @Override
-                public void onRewardedVideoAdFailedToLoad(int errorCode) {
-                    Log.w("godot", "AdMob: onRewardedVideoAdFailedToLoad. errorCode: " + errorCode);
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_failed_to_load", new Object[] { id, ""+errorCode });
-                }
-
-                @Override
-                public void onRewardedVideoAdLoaded() {
-                    Log.w("godot", "AdMob: onRewardedVideoAdLoaded");
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_loaded", new Object[] { id });
-                }
-
-                @Override
-                public void onRewardedVideoAdOpened() {
-                    Log.w("godot", "AdMob: onRewardedVideoAdOpened");
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_opened", new Object[] { id });
-                }
-
-                @Override
-                public void onRewarded(RewardItem reward) {
-                    Log.w("godot", "AdMob: " + String.format(" onRewarded! currency: %s amount: %d", reward.getType(), reward.getAmount()));
-                    GodotLib.calldeferred(callback_id, "_on_rewarded", new Object[] { id, reward.getType(), reward.getAmount() });
-                }
-
-                @Override
-                public void onRewardedVideoStarted() {
-                    Log.w("godot", "AdMob: onRewardedVideoStarted");
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_started", new Object[] { id });
-                }
-
-                @Override
-                public void onRewardedVideoCompleted() {
-                    Log.w("godot", "AdMob: onRewardedVideoCompleted");
-                    GodotLib.calldeferred(callback_id, "_on_rewarded_video_completed", new Object[] { id });
-                }
-            });
-        rewardedVideoAd.loadAd(id, getAdRequest());
-        */
         return rewardedAd;
 	}
 
@@ -222,7 +171,7 @@ public class GodotAdMob extends Godot.SingletonBase
                 RewardedAd rew = initRewardedVideo(id, callback_id);
                 rewardeds.put(id, rew);
 			}
-		});
+        });
 	}
 
 	/**
@@ -251,6 +200,21 @@ public class GodotAdMob extends Godot.SingletonBase
 	/* Banner
 	 * ********************************************************************** */
 
+    private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth);
+    }
+
     private AdView initBanner(final String id, final boolean isOnTop, final int callback_id)
     {
         layout = (FrameLayout)activity.getWindow().getDecorView().getRootView();
@@ -266,7 +230,9 @@ public class GodotAdMob extends Godot.SingletonBase
 
         adView.setBackgroundColor(Color.TRANSPARENT);
 
-        adView.setAdSize(AdSize.SMART_BANNER);
+        AdSize adSize = getAdSize();
+        adView.setAdSize(adSize);
+        //adView.setAdSize(AdSize.SMART_BANNER);
         adView.setAdListener(new AdListener()
             {
                 @Override
@@ -464,7 +430,8 @@ public class GodotAdMob extends Godot.SingletonBase
 	 */
 	public int getBannerWidth(final String id)
 	{
-		return AdSize.SMART_BANNER.getWidthInPixels(activity);
+		//return AdSize.SMART_BANNER.getWidthInPixels(activity);
+        return getAdSize().getWidthInPixels(activity);
 	}
 
 	/**
@@ -473,7 +440,8 @@ public class GodotAdMob extends Godot.SingletonBase
 	 */
 	public int getBannerHeight(final String id)
 	{
-		return AdSize.SMART_BANNER.getHeightInPixels(activity);
+		//return AdSize.SMART_BANNER.getHeightInPixels(activity);
+        return getAdSize().getHeightInPixels(activity);
 	}
 
 	/* Interstitial
