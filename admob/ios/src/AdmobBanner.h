@@ -1,8 +1,6 @@
 #import <GoogleMobileAds/GADBannerView.h>
 #import "app_delegate.h"
 
-#define BANNER_ENABLE_DELAY 5
- 
 @interface AdmobBanner: NSObject <GADBannerViewDelegate> {
     GADBannerView *bannerView;
     bool initialized;
@@ -13,8 +11,10 @@
     ViewController *rootController;
 }
 
-- (void)initialize:(BOOL)is_real: (int)instance_id;
-- (void)loadBanner:(NSString*)bannerId :(BOOL)is_on_top;
+@property (nonatomic, readonly) NSString *unitId;
+
+- (void)initialize:(BOOL)is_real callbackId:(int)instance_id;
+- (void)loadBanner:(NSString*)bannerId top:(BOOL)is_on_top;
 - (void)showBanner;
 - (void)hideBanner;
 - (void)disableBanner;

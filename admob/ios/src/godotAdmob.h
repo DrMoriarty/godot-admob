@@ -5,7 +5,7 @@
 
 #include "reference.h"
 
-
+/*
 #ifdef __OBJC__
 @class AdmobBanner;
 typedef AdmobBanner *bannerPtr;
@@ -18,8 +18,7 @@ typedef void *bannerPtr;
 typedef void *interstitialPtr;
 typedef void *rewardedPtr;
 #endif
-
-
+*/
 
 class GodotAdmob : public Reference {
     
@@ -29,27 +28,30 @@ class GodotAdmob : public Reference {
     OBJ_TYPE(GodotAdmob, Reference);
 #endif
 
-    bannerPtr banner;
-    interstitialPtr interstitial;
-    rewardedPtr rewarded;
-    
+    int defaultCallbackId;
+    bool productionMode;
+    bool bannerShown;
 
 protected:
     static void _bind_methods();
 
+    void disableAllBanners();
+    void enableAllBanners();
+
 public:
 
     void init(bool isReal, int instanceId);
-    void loadBanner(const String &bannerId, bool isOnTop);
-    void showBanner();
-    void hideBanner();
+    void loadBanner(const String &bannerId, bool isOnTop, int callbackId);
+    void showBanner(const String &bannerId);
+    void hideBanner(const String &bannerId);
+    void removeBanner(const String &bannerId);
     void resize();
-    int getBannerWidth();
-    int getBannerHeight();
-    void loadInterstitial(const String &interstitialId);
-    void showInterstitial();
-    void loadRewardedVideo(const String &rewardedId);
-    void showRewardedVideo();
+    int getBannerWidth(const String &bannerId);
+    int getBannerHeight(const String &bannerId);
+    void loadInterstitial(const String &interstitialId, int callbackId);
+    void showInterstitial(const String &interstitialId);
+    void loadRewardedVideo(const String &rewardedId, int callbackId);
+    void showRewardedVideo(const String &rewardedId);
 
     GodotAdmob();
     ~GodotAdmob();
