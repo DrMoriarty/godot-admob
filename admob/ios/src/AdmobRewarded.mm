@@ -40,12 +40,12 @@
                 // Handle ad failed to load case.
                 NSLog(@"Reward based video ad failed to load: %@ ", error.localizedDescription);
                 Object *obj = ObjectDB::get_instance(instanceId);
-                obj->call_deferred("_on_rewarded_video_ad_failed_to_load", adUnitId, error.localizedDescription);
+                obj->call_deferred("_on_rewarded_video_ad_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
             } else {
                 // Ad successfully loaded.
                 NSLog(@"Reward based video ad is received.");
                 Object *obj = ObjectDB::get_instance(instanceId);
-                obj->call_deferred("_on_rewarded_video_ad_loaded", adUnitId);
+                obj->call_deferred("_on_rewarded_video_ad_loaded", String(adUnitId.UTF8String));
             }
         }];
 }
@@ -67,19 +67,19 @@
 - (void)rewardedAdDidPresent:(GADRewardedAd *)rewardedAd {
     NSLog(@"rewardedAdDidPresent:");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_opened", adUnitId);
+    obj->call_deferred("_on_rewarded_video_ad_opened", String(adUnitId.UTF8String));
 }
 
 - (void)rewardedAd:(GADRewardedAd *)rewardedAd didFailToPresentWithError:(NSError *)error {
     NSLog(@"rewardedAd:didFailToPresentWithError: %@ ", error.localizedDescription);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_failed_to_load", adUnitId, error.localizedDescription);
+    obj->call_deferred("_on_rewarded_video_ad_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
 }
 
 - (void)rewardedAdDidDismiss:(GADRewardedAd *)rewardedAd {
     NSLog(@"rewardedAdDidDismiss:");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded_video_ad_closed", adUnitId);
+    obj->call_deferred("_on_rewarded_video_ad_closed", String(adUnitId.UTF8String));
     [NSNotificationCenter.defaultCenter postNotificationName:@"AdMobRewardedClosed" object:nil];
     if(_closeCallback != nil) _closeCallback();
 }
@@ -87,7 +87,7 @@
 - (void)rewardedAd:(GADRewardedAd *)rewardedAd userDidEarnReward:(GADAdReward *)reward {
     NSLog(@"Reward received with currency %@ , amount %lf", reward.type, [reward.amount doubleValue]);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_rewarded", adUnitId, [reward.type UTF8String], reward.amount.doubleValue);
+    obj->call_deferred("_on_rewarded", adUnitId, String(reward.type.UTF8String), reward.amount.doubleValue);
 }
 
 /*

@@ -196,14 +196,14 @@
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"adViewDidReceiveAd");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_banner_loaded", adUnitId);
+    obj->call_deferred("_on_banner_loaded", String(adUnitId.UTF8String));
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_banner_failed_to_load", adUnitId, error.localizedDescription);
+    obj->call_deferred("_on_banner_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
 }
 
 /// Tells the delegate that a full screen view will be presented in response

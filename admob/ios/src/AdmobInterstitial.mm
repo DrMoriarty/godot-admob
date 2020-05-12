@@ -64,7 +64,7 @@
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     NSLog(@"interstitialDidReceiveAd");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_loaded", adUnitId);
+    obj->call_deferred("_on_interstitial_loaded", String(adUnitId.UTF8String));
 }
 
 /// Tells the delegate an ad request failed.
@@ -72,7 +72,7 @@
 didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"interstitial:didFailToReceiveAdWithError: %@", [error localizedDescription]);
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_failed_to_load", adUnitId, error.localizedDescription);
+    obj->call_deferred("_on_interstitial_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
 }
 
 /// Tells the delegate that an interstitial will be presented.
@@ -89,7 +89,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialDidDismissScreen");
     Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_close", adUnitId);
+    obj->call_deferred("_on_interstitial_close", String(adUnitId.UTF8String));
     [NSNotificationCenter.defaultCenter postNotificationName:@"AdMobInterstitialClosed" object:nil];
     if(_closeCallback != nil) _closeCallback();
 }
