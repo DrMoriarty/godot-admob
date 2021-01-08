@@ -1,20 +1,19 @@
+#include <Godot.hpp>
 #import "AdmobInterstitial.h"
-#include "reference.h"
 
+using namespace godot;
 
 @implementation AdmobInterstitial
 
 - (void)dealloc {
     interstitial.delegate = nil;
-    [interstitial release];
-    [super dealloc];
 }
 
-- (void)initialize:(BOOL)is_real callbackId:(int)instance_id {
+- (void)initialize:(BOOL)is_real callbackObj:(Object*)cbObj {
     isReal = is_real;
     initialized = true;
-    instanceId = instance_id;
-    rootController = [AppDelegate getViewController];
+    callbackObj = cbObj;
+    rootController = UIApplication.sharedApplication.keyWindow.rootViewController;
 }
 
 -(NSString*)unitId {
@@ -29,15 +28,7 @@
         return;
     }
     adUnitId = interstitialId;
-    
-    interstitial = nil;
-    if(!isReal) {
-        interstitial = [[GADInterstitial alloc] initWithAdUnitID:@"ca-app-pub-3940256099942544/4411468910"];
-    }
-    else {
-        interstitial = [[GADInterstitial alloc] initWithAdUnitID:interstitialId];
-    }
-    
+    interstitial = [[GADInterstitial alloc] initWithAdUnitID:interstitialId];
     interstitial.delegate = self;
     
     //load
@@ -63,16 +54,14 @@
 /// Tells the delegate an ad request succeeded.
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
     NSLog(@"interstitialDidReceiveAd");
-    Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_loaded", String(adUnitId.UTF8String));
+    callbackObj->call_deferred("_on_interstitial_loaded", String(adUnitId.UTF8String));
 }
 
 /// Tells the delegate an ad request failed.
 - (void)interstitial:(GADInterstitial *)ad
 didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"interstitial:didFailToReceiveAdWithError: %@", [error localizedDescription]);
-    Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
+    callbackObj->call_deferred("_on_interstitial_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
 }
 
 /// Tells the delegate that an interstitial will be presented.
@@ -88,8 +77,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 /// Tells the delegate the interstitial had been animated off the screen.
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
     NSLog(@"interstitialDidDismissScreen");
-    Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_interstitial_close", String(adUnitId.UTF8String));
+    callbackObj->call_deferred("_on_interstitial_close", String(adUnitId.UTF8String));
     [NSNotificationCenter.defaultCenter postNotificationName:@"AdMobInterstitialClosed" object:nil];
     if(_closeCallback != nil) _closeCallback();
 }

@@ -1,14 +1,7 @@
-#include "godotAdmob.h"
-#import "app_delegate.h"
+#include "AdMob.hpp"
 #import "AdmobBanner.h"
 #import "AdmobInterstitial.h"
 #import "AdmobRewarded.h"
-
-#if VERSION_MAJOR == 3
-#define CLASS_DB ClassDB
-#else
-#define CLASS_DB ObjectTypeDB
-#endif
 
 #define BANNER_ENABLE_DELAY 5
  
@@ -17,29 +10,34 @@ static NSMutableDictionary *interstitials = nil;
 static NSMutableDictionary *rewardeds = nil;
 static NSString *lastBannerId = nil;
 
-GodotAdmob::GodotAdmob() {
+using namespace godot;
+
+AdMob::AdMob() {
     banners = [NSMutableDictionary new];
     interstitials = [NSMutableDictionary new];
     rewardeds = [NSMutableDictionary new];
 }
 
-GodotAdmob::~GodotAdmob() {
+AdMob::~AdMob() {
 }
 
-void GodotAdmob::init(bool isReal, int instanceId) {
+void AdMob::_init() {
+    
+}
+
+void AdMob::init(bool isReal) {
     productionMode = isReal;
-    defaultCallbackId = instanceId;
 }
 
-void GodotAdmob::loadBanner(const String &bannerId, bool isOnTop, int callbackId) {
+void AdMob::loadBanner(const String &bannerId, bool isOnTop, Object* callbackObj) {
     NSString *idStr = [NSString stringWithCString:bannerId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobBanner *banner = [AdmobBanner alloc];
-    [banner initialize :productionMode callbackId:(callbackId > 0 ? callbackId : defaultCallbackId)];
+    [banner initialize :productionMode callbackObj:callbackObj];
     [banner loadBanner:idStr top:isOnTop];
     [banners setObject:banner forKey:idStr];
 }
 
-void GodotAdmob::showBanner(const String &bannerId) {
+void AdMob::showBanner(const String &bannerId) {
     NSString *idStr = [NSString stringWithCString:bannerId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobBanner * banner = [banners objectForKey:idStr];
     [banner showBanner];
@@ -47,45 +45,45 @@ void GodotAdmob::showBanner(const String &bannerId) {
     bannerShown = true;
 }
 
-void GodotAdmob::hideBanner(const String &bannerId) {
+void AdMob::hideBanner(const String &bannerId) {
     NSString *idStr = [NSString stringWithCString:bannerId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobBanner * banner = [banners objectForKey:idStr];
     [banner hideBanner];
     bannerShown = false;
 }
 
-void GodotAdmob::removeBanner(const String &bannerId) {
+void AdMob::removeBanner(const String &bannerId) {
     NSString *idStr = [NSString stringWithCString:bannerId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobBanner * banner = [banners objectForKey:idStr];
     [banner disableBanner];
     [banners removeObjectForKey:idStr];
 }
 
-void GodotAdmob::resize() {
+void AdMob::resize() {
     //[banner resize];
 }
 
-int GodotAdmob::getBannerWidth(const String &bannerId) {
+int AdMob::getBannerWidth(const String &bannerId) {
     NSString *idStr = [NSString stringWithCString:bannerId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobBanner * banner = [banners objectForKey:idStr];
     return (uintptr_t)[banner getBannerWidth];
 }
 
-int GodotAdmob::getBannerHeight(const String &bannerId) {
+int AdMob::getBannerHeight(const String &bannerId) {
     NSString *idStr = [NSString stringWithCString:bannerId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobBanner * banner = [banners objectForKey:idStr];
     return (uintptr_t)[banner getBannerHeight];
 }
 
-void GodotAdmob::loadInterstitial(const String &interstitialId, int callbackId) {
+void AdMob::loadInterstitial(const String &interstitialId, Object* callbackObj) {
     NSString *idStr = [NSString stringWithCString:interstitialId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobInterstitial * interstitial = [AdmobInterstitial alloc];
-    [interstitial initialize:productionMode callbackId:(callbackId > 0 ? callbackId : defaultCallbackId)];
+    [interstitial initialize:productionMode callbackObj:callbackObj];
     [interstitial loadInterstitial:idStr];
     [interstitials setObject:interstitial forKey:idStr];
 }
 
-void GodotAdmob::showInterstitial(const String &interstitialId) {
+void AdMob::showInterstitial(const String &interstitialId) {
     // need to disable active banner
     disableAllBanners();
     
@@ -99,15 +97,15 @@ void GodotAdmob::showInterstitial(const String &interstitialId) {
     [interstitial showInterstitial];
 }
 
-void GodotAdmob::loadRewardedVideo(const String &rewardedId, int callbackId) {
+void AdMob::loadRewardedVideo(const String &rewardedId, Object* callbackObj) {
     NSString *idStr = [NSString stringWithCString:rewardedId.utf8().get_data() encoding: NSUTF8StringEncoding];
     AdmobRewarded * rewarded = [AdmobRewarded alloc];
-    [rewarded initialize:productionMode callbackId:(callbackId > 0 ? callbackId : defaultCallbackId)];
+    [rewarded initialize:productionMode callbackObj:callbackObj];
     [rewarded loadRewardedVideo: idStr];
     [rewardeds setObject:rewarded forKey:idStr];
 }
 
-void GodotAdmob::showRewardedVideo(const String &rewardedId) {
+void AdMob::showRewardedVideo(const String &rewardedId) {
     // need to disable active banner
     disableAllBanners();
 
@@ -121,14 +119,14 @@ void GodotAdmob::showRewardedVideo(const String &rewardedId) {
     [rewarded showRewardedVideo];
 }
 
-void GodotAdmob::disableAllBanners() {
+void AdMob::disableAllBanners() {
     for(NSString *bid in banners.allKeys) {
         AdmobBanner *b = [banners objectForKey:bid];
         [b disableBanner];
     }
 }
 
-void GodotAdmob::enableAllBanners() {
+void AdMob::enableAllBanners() {
     for(NSString *bid in banners.allKeys) {
         AdmobBanner *b = [banners objectForKey:bid];
         [b enableBanner];
@@ -139,16 +137,16 @@ void GodotAdmob::enableAllBanners() {
     }
 }
 
-void GodotAdmob::_bind_methods() {
-    CLASS_DB::bind_method("init",&GodotAdmob::init);
-    CLASS_DB::bind_method("loadBanner",&GodotAdmob::loadBanner);
-    CLASS_DB::bind_method("showBanner",&GodotAdmob::showBanner);
-    CLASS_DB::bind_method("hideBanner",&GodotAdmob::hideBanner);
-    CLASS_DB::bind_method("loadInterstitial",&GodotAdmob::loadInterstitial);
-    CLASS_DB::bind_method("showInterstitial",&GodotAdmob::showInterstitial);
-    CLASS_DB::bind_method("loadRewardedVideo",&GodotAdmob::loadRewardedVideo);
-    CLASS_DB::bind_method("showRewardedVideo",&GodotAdmob::showRewardedVideo);
-    CLASS_DB::bind_method("resize",&GodotAdmob::resize);
-    CLASS_DB::bind_method("getBannerWidth",&GodotAdmob::getBannerWidth);
-    CLASS_DB::bind_method("getBannerHeight",&GodotAdmob::getBannerHeight);
+void AdMob::_register_methods() {
+    register_method("init",&AdMob::init);
+    register_method("loadBanner",&AdMob::loadBanner);
+    register_method("showBanner",&AdMob::showBanner);
+    register_method("hideBanner",&AdMob::hideBanner);
+    register_method("loadInterstitial",&AdMob::loadInterstitial);
+    register_method("showInterstitial",&AdMob::showInterstitial);
+    register_method("loadRewardedVideo",&AdMob::loadRewardedVideo);
+    register_method("showRewardedVideo",&AdMob::showRewardedVideo);
+    register_method("resize",&AdMob::resize);
+    register_method("getBannerWidth",&AdMob::getBannerWidth);
+    register_method("getBannerHeight",&AdMob::getBannerHeight);
 }

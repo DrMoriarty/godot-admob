@@ -1,18 +1,17 @@
-#import "app_delegate.h"
 #import <GoogleMobileAds/GADRewardedAdDelegate.h>
 
 @interface AdmobRewarded: NSObject <GADRewardedAdDelegate> {
     bool initialized;
     bool isReal;
-    int instanceId;
+    godot::Object* callbackObj;
     NSString *adUnitId;
-    ViewController *rootController;
+    UIViewController *rootController;
 }
 
 @property (nonatomic, readonly) NSString *unitId;
 @property (nonatomic, strong) void(^closeCallback)(void);
 
-- (void)initialize:(BOOL)is_real callbackId:(int)instance_id;
+- (void)initialize:(BOOL)is_real callbackObj:(godot::Object*)cbObj;
 - (void)loadRewardedVideo:(NSString*)rewardedId;
 - (void)showRewardedVideo;
 

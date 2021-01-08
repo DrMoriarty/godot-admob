@@ -1,19 +1,19 @@
+#include <Godot.hpp>
 #import "AdmobBanner.h"
-#include "reference.h"
+
+using namespace godot;
 
 @implementation AdmobBanner
 
 - (void)dealloc {
     bannerView.delegate = nil;
-    [bannerView release];
-    [super dealloc];
 }
 
-- (void)initialize:(BOOL)is_real callbackId:(int)instance_id {
+- (void)initialize:(BOOL)is_real callbackObj:(Object*)cbObj {
     isReal = is_real;
     initialized = true;
-    instanceId = instance_id;
-    rootController = [AppDelegate getViewController];
+    callbackObj = cbObj;
+    rootController = UIApplication.sharedApplication.keyWindow.rootViewController;
 }
 
 -(NSString*)unitId {
@@ -41,16 +41,9 @@
             bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerLandscape];
         }
         
-        if(!isReal) {
-            bannerView.adUnitID = @"ca-app-pub-3940256099942544/2934735716";
-        }
-        else {
-            bannerView.adUnitID = bannerId;
-        }
-
+        bannerView.adUnitID = bannerId;
         bannerView.delegate = self;
         bannerView.rootViewController = rootController;
-        
 
         [self addBannerViewToView:bannerView top:is_on_top];
     }
@@ -195,15 +188,13 @@
 /// Tells the delegate an ad request loaded an ad.
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
     NSLog(@"adViewDidReceiveAd");
-    Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_banner_loaded", String(adUnitId.UTF8String));
+    callbackObj->call_deferred("_on_banner_loaded", String(adUnitId.UTF8String));
 }
 
 /// Tells the delegate an ad request failed.
 - (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(GADRequestError *)error {
     NSLog(@"adView:didFailToReceiveAdWithError: %@", [error localizedDescription]);
-    Object *obj = ObjectDB::get_instance(instanceId);
-    obj->call_deferred("_on_banner_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
+    callbackObj->call_deferred("_on_banner_failed_to_load", String(adUnitId.UTF8String), String(error.description.UTF8String));
 }
 
 /// Tells the delegate that a full screen view will be presented in response
